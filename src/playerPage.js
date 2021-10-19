@@ -45,7 +45,7 @@ export default function PlayerPage(props) {
         getPlayerInfo(name).then((obj) => {
 
             setUser(obj);
-            
+            console.log(user);
         })
 
     }, [])
@@ -62,7 +62,7 @@ export default function PlayerPage(props) {
                     </Grid>
                     <Grid item xs={3} style={{marginBottom: 75}}>
                         <Typography style={{color: "black"}}variant="h2">{user.user.gamertag}</Typography>
-                        <Typography style={{color: "black"}}variant="h4">{user.user.clantag}</Typography>
+                        <Typography style={{color: "black"}}variant="h4">{user.user.clanTag}</Typography>
                     </Grid>
                 </Grid>
             </Paper>

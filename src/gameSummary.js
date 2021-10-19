@@ -12,19 +12,19 @@ export default function GameSummary(props) {
     const [gameMode, setGamemode] = React.useState([]);
     const [count, setCount] = React.useState(0);
     const [summary, setSummary] = React.useState({});
-
-    console.log(props);
+    const [loaded, setLoaded] = React.useState(false)
 
     useEffect(() => {
 
         getRecentMatchesGame(name, game).then((obj) => {
             
             setGamemode(obj);
-            setCount(obj.length);
 
             var sum = summaryOfGames(obj);
 
             setSummary(sum);
+
+            setLoaded(true);
 
         })
 
@@ -49,8 +49,6 @@ export default function GameSummary(props) {
 
         matches.forEach(obj => {
 
-            console.log(obj.kills)
-
             sum.wins += Number(obj.won)
             sum.losses += !Number(obj.won)
             sum.kills += obj.kills;
@@ -65,8 +63,6 @@ export default function GameSummary(props) {
         sum.headshotRate = (headshots/sum.kills).toFixed(2);
         sum.headshotsPerGame = (headshots/matches.length).toFixed(2);
 
-        console.log(sum)
-
         return sum;
 
     }
@@ -74,15 +70,15 @@ export default function GameSummary(props) {
     return(
 
         <Paper elevation={3} style={{marginTop: 10, background: "#DCDCDC"}}>
-            {gameMode.gamertag !== undefined &&
+            {loaded &&
             <div>
                 <Typography component={'span'} style={{color: "black", margin: 5, paddingTop: 10}}>Summary of {gameMode.length} {game} games</Typography>
                 <Grid container direction={"row"}>
                     <Grid item xs={3} style={{padding: 0}}>
                         <List style={{padding: 0}}>
                             <ListItem alignItems="center" style={{padding: 0}}>
-                                <WinPieChart style={{width: 100, padding: 0}}></WinPieChart>
-                                <Typography component={'span'} style={{color: "black", margin: 5, width: 100}}>d</Typography>
+                                <WinPieChart data={{wins: summary.wins, losses: summary.losses}} style={{width: 100, padding: 0}}></WinPieChart>
+                                <Typography component={'span'} style={{color: "black", margin: 5, width: 100}}>{summary.wins}W {summary.losses}L</Typography>
                             </ListItem>
                         </List>
                     </Grid>

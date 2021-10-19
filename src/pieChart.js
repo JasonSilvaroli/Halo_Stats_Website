@@ -5,9 +5,9 @@ export default function WinPieChart(props) {
 
     const COLORS = ["#0088FE", "#FF8042"];
 
-    const wins = props.data;
-    const losses = 10 - wins
-
+    const wins = props.data.wins;
+    const losses = props.data.losses;
+    
     const data = [
         {name: "Wins", value: wins},
         {name: "Losses", value: losses}
@@ -15,7 +15,7 @@ export default function WinPieChart(props) {
     const RADIAN = Math.PI / 180;
 
     const renderCustomizedLabel = ({
-        cx, cy, midAngle, innerRadius, outerRadius, percent, index,
+        cx, cy, midAngle, innerRadius, outerRadius, index,
       }) => {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
         const x = cx + radius * Math.cos(-midAngle * RADIAN);

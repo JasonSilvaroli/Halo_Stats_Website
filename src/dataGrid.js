@@ -27,7 +27,7 @@ export default function HaloDataGrid() {
 
     const classes = useStyles();
     const history = useHistory();
-    const users = ["Not Ajtiger2", "Flyingcow10", "ShantiPanti", "nutmusprime", "KiingBooty", "Garth Tim", "Neon Space 2788", "Loopszs", "CantoeKnees"];
+    const users = ["Not Ajtiger2", "Flyingcow10", "ShantiPanti", "nutmusprime", "KiingBooty", "Garth Tim", "Neon Space 2788", "Loopszs", "CantoeKnees", "GrumpierCone733"];
 
     const [player, setPlayer] = React.useState([]);
     const [rows, setRows] = React.useState([]);

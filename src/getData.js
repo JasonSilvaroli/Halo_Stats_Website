@@ -177,8 +177,6 @@ export async function getRecentMatchesGame(name, game) {
     
     }
 
-    console.log(recentMatches)
-
     return await recentMatches;
 
 }
