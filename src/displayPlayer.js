@@ -3,13 +3,11 @@ import React, { useEffect } from 'react';
 
 export default function DisplayPlayer() {
 
-    const users = ["Not Ajtiger2", "Flyingcow10", "ShantiPanti", "GrumpierCone733", "nutmusprime", "KiingBooty", "Garth Tim"];
+    const users = ["Not Ajtiger2", "Flyingcow10", "ShantiPanti", "nutmusprime", "KiingBooty", "Garth Tim", "Neon Space 2788", "Loopszs", "CantoeKnees"];
 
     const [player, setPlayer] = React.useState([]);
     
     function getInfo(name) {
-
-        console.log(name);
 
         return (
             fetch('https://halo.api.stdlib.com/mcc@0.1.0/stats/?gamertag=' + name).then((res) => {
@@ -18,14 +16,21 @@ export default function DisplayPlayer() {
 
                     if(data !== undefined) {
 
-                    data.killDeathRatio = Number(data.killDeathRatio.toFixed(2));
-                    data.streak = String(data.streak.toUpperCase())
+                        console.log(data)
+                        setPlayer(player => [...player, data])
 
-                    setPlayer(player => [...player, data])
                     }
                     return;
 
+                }).catch((error) => {
+
+                    console.log(error)
+        
                 });
+            }).catch((error) => {
+
+                console.log(error)
+    
             })
         )
     };
@@ -41,6 +46,7 @@ export default function DisplayPlayer() {
 
             if (!same) {
 
+                console.log("test")
                 getInfo(user);
 
             } else {

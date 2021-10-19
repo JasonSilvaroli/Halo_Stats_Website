@@ -1,14 +1,14 @@
 import './App.css';
 import Calculator from './calculator';
-import DisplayPlayer from './displayPlayer';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import PlayerPage from './playerPage';
+import NavBar from './topNavBar';
+import HaloDataGrid from './dataGrid';
 
 function App() {
   return (
@@ -16,31 +16,18 @@ function App() {
       <header className="App-header">
        <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
-
+          <NavBar></NavBar>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
+          <Route name="about" path="/about">
             <Calculator />
           </Route>
-          <Route path="/user/">
+          <Route name="user" path="/user/">
             <PlayerPage />
           </Route>
-          <Route path="/">
-            <DisplayPlayer />
+          <Route name="home" path="/">
+            <HaloDataGrid></HaloDataGrid>
           </Route>
         </Switch>
       </div>
