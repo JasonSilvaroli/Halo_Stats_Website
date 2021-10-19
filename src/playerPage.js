@@ -1,6 +1,5 @@
 import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import GameSummary from './gameSummary';
 import { getPlayerInfo, getRecentMatches } from './getData';
 
@@ -26,8 +25,7 @@ function TabPanel(props) {
 
 export default function PlayerPage(props) {
 
-    const [value, setValue] = React.useState(0)
-    const [matches, setMatches] = React.useState([]);
+    const [value, setValue] = React.useState(0);
     const [user, setUser] = React.useState({})
 
     var name  = window.location.pathname.split('/')[2];
