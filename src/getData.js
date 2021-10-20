@@ -85,8 +85,6 @@ export async function getPlayerInfo(name) {
 
     player.user.serviceTag = playerAp.data.service_tag;
 
-    console.log(player.user.gamertag + " getData")
-
     return player;
 
 }
@@ -103,7 +101,7 @@ export async function getRecentMatches(name, page = 1) {
         }
         this.gameType = data.details.category.name
         this.date = data.played_at
-        this.duration = data.duration.human
+        this.duration = data.duration.human.split(" ").slice(1).join(" ")
         this.kills = data.stats.kills
         this.deaths = data.stats.deaths
         this.assists = data.stats.assists
@@ -142,6 +140,24 @@ export async function getRecentMatches(name, page = 1) {
 
     responseRM.data.forEach((data, index) => {
 
+        
+
+        if(data.details.category.name === "Unknown") {
+
+            data.details.category.name = "CTF"
+
+        }
+
+        var date = data.played_at.split("T")
+
+        date[1] = date[1].split(".")[0];
+
+        date[1] = date[1].split(":");
+
+        date[1] = date[1][0] + ":" + date[1][1]
+
+        data.played_at = date[0] + " " + date[1];
+
         const obj = new Match(data);
         matchHistory.matches[matchHistory.count + index] = obj;
 
@@ -165,7 +181,7 @@ export async function getRecentMatchesGame(name, game) {
 
         var filtered = filterMatches(matches.matches, game);
 
-        if(filtered) {
+        if(filtered && recentMatches.length < 10) {
 
             filtered.forEach((obj) => {
 
@@ -187,7 +203,7 @@ function filterMatches(matches, game) {
 
     matches.forEach((obj) => {
 
-        if(obj.gameType.toString() === game.toString()) {
+        if(obj.gameType === game) {
 
             matchGame.push(obj);
 
@@ -195,7 +211,6 @@ function filterMatches(matches, game) {
 
     })
 
-    console.log()
     return matchGame;
 
 }

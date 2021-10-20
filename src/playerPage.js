@@ -1,7 +1,8 @@
 import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
+import GameStats from './gameStats';
 import GameSummary from './gameSummary';
-import { getPlayerInfo, getRecentMatches } from './getData';
+import { getPlayerInfo, getRecentMatchesGame } from './getData';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -27,26 +28,36 @@ export default function PlayerPage(props) {
 
     const [value, setValue] = React.useState(0);
     const [user, setUser] = React.useState({})
+    const [matches, setMatches] = React.useState({})
+    const [loaded, setLoaded] = React.useState(false);
+
+    const gameModes = ["Slayer", "CTF", "Extraction", "Dominion", "Assault"]
 
     var name  = window.location.pathname.split('/')[2];
 
     const handleChange = (event, newValue) => {
 
         setValue(newValue);
+        setLoaded(false);
 
     };
 
     useEffect(() => {
 
-        //setUser(getPlayerInfo(name));
-
         getPlayerInfo(name).then((obj) => {
 
             setUser(obj);
-            console.log(user);
+            
         })
 
-    }, [])
+        getRecentMatchesGame(name, gameModes[value]).then((obj) => {
+
+            setMatches(obj);
+            setLoaded(true);
+
+        })
+
+    }, [value])
 
     return(
 
@@ -55,10 +66,10 @@ export default function PlayerPage(props) {
             <div>
             <Paper elevation={3} style={{background: "#DCDCDC"}}>
                 <Grid container spacing={4} direction={"row"} alignItems={"center"}>
-                    <Grid item xs={3}>
-                        <img src={user.user.emblem} alt="emblem" style={{height: 240, paddingTop: 20}}></img>
+                    <Grid item xs={2}>
+                        <img src={user.user.emblem} alt="emblem" style={{height: 120, paddingTop: 20}}></img>
                     </Grid>
-                    <Grid item xs={3} style={{marginBottom: 75}}>
+                    <Grid item xs={3} >
                         <Typography style={{color: "black"}}variant="h2">{user.user.gamertag}</Typography>
                         <Typography style={{color: "black"}}variant="h4">{user.user.clanTag}</Typography>
                     </Grid>
@@ -68,6 +79,11 @@ export default function PlayerPage(props) {
                 <Grid item xs={4}>
                     <Paper elevation={3} style={{width: 270, background: "#DCDCDC"}}>
                         <List>
+                            <ListItem>
+                                <Paper elevation={2} style={{padding: 5, width: 250}}>
+                                    <Typography style={{color: "black"}}>Career Stats</Typography>
+                                </Paper>
+                            </ListItem>
                             <ListItem>
                                 <Paper elevation={2} style={{padding: 5, width: 250}}>
                                     <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Playtime: </Typography>
@@ -121,28 +137,67 @@ export default function PlayerPage(props) {
                 </Grid>
                 <Grid item xs={8}>
                     <Paper style={{background: "#D3D3D3"}}>
-                        <Tabs sx={{ borderBottom: 1, borderColor: 'divider'}} value={value} onChange={handleChange}>
+                        <Tabs value={value} onChange={handleChange}>
                             <Tab label="Slayer"></Tab>
                             <Tab label="CTF"></Tab>
                             <Tab label="Extraction"></Tab>
                             <Tab label="Dominion"></Tab>
                             <Tab label="Assault"></Tab>
                         </Tabs>
-                        <TabPanel value={value} index={0}>
-                            <GameSummary gamertag={user.user.gamertag} game={"Slayer"}></GameSummary>
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            <GameSummary gamertag={user.gamertag} game={"CTF"}></GameSummary>
-                        </TabPanel>
-                        <TabPanel value={value} index={2}>
-                            <GameSummary gamertag={user.gamertag} game={"Extraction"}></GameSummary>
-                        </TabPanel>
-                        <TabPanel value={value} index={3}>
-                            <GameSummary gamertag={user.gamertag} game={"Dominion"}></GameSummary>
-                        </TabPanel>
-                        <TabPanel value={value} index={4}>
-                            <GameSummary gamertag={user.gamertag} game={"Assault"}></GameSummary>
-                        </TabPanel>
+                        {loaded && 
+                        <div>
+                            <TabPanel value={value} index={0}>
+                                <GameSummary gamertag={user.user.gamertag} game={"Slayer"}></GameSummary>
+                                {
+                                    matches.map((obj) => {
+
+                                        return(<GameStats data={obj} />)
+
+                                    })
+                                }
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                                <GameSummary gamertag={user.user.gamertag} game={"CTF"}></GameSummary>
+                                {
+                                    matches.map((obj) => {
+
+                                        return(<GameStats data={obj} />)
+
+                                    })
+                                }
+                            </TabPanel>
+                            <TabPanel value={value} index={2}>
+                                <GameSummary gamertag={user.user.gamertag} game={"Extraction"}></GameSummary>
+                                {
+                                    matches.map((obj) => {
+
+                                        return(<GameStats data={obj} />)
+
+                                    })
+                                }
+                            </TabPanel>
+                            <TabPanel value={value} index={3}>
+                                <GameSummary gamertag={user.user.gamertag} game={"Dominion"}></GameSummary>
+                                {
+                                    matches.map((obj) => {
+
+                                        return(<GameStats data={obj} />)
+
+                                    })
+                                }
+                            </TabPanel>
+                            <TabPanel value={value} index={4}>
+                                <GameSummary gamertag={user.user.gamertag} game={"Assault"}></GameSummary>
+                                {
+                                    matches.map((obj) => {
+
+                                        return(<GameStats data={obj} />)
+
+                                    })
+                                }
+                            </TabPanel>
+                        </div>
+                        }
                     </Paper>
                 </Grid>
             </Grid>
