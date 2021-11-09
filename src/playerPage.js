@@ -2,7 +2,8 @@ import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box } fr
 import React, { useEffect } from 'react';
 import GameStats from './gameStats';
 import GameSummary from './gameSummary';
-import { getPlayerInfo, getRecentMatchesGame } from './getData';
+import { getPlayerInfo, getRecentMatches, getRecentMatchesGame } from './getData';
+import LineGraph from './lineGraph';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -30,8 +31,11 @@ export default function PlayerPage(props) {
     const [user, setUser] = React.useState({})
     const [matches, setMatches] = React.useState({})
     const [loaded, setLoaded] = React.useState(false);
-
-    const gameModes = ["Slayer", "CTF", "Extraction", "Dominion", "Assault"]
+    const [careerStats, setCareerStats] = React.useState([]);
+    
+    const [graphKD, setGraphKD] = React.useState([]);
+    const [graphKills, setGraphKills] = React.useState([]);
+    const [graphStreak, setGraphStreak] = React.useState([]);
 
     var name  = window.location.pathname.split('/')[2];
 
@@ -44,10 +48,23 @@ export default function PlayerPage(props) {
 
     useEffect(() => {
 
+        const gameModes = ["Slayer", "CTF", "Extraction", "King Of The Hill", "Assault"];
+
         getPlayerInfo(name).then((obj) => {
 
             setUser(obj);
-            
+
+            setCareerStats([
+                {name: "Playtime:", stat: obj.allTime.timePlayed},
+                {name: "Games Played:", stat: obj.allTime.gamesPlayed},
+                {name: "Kills:", stat: obj.allTime.kills},
+                {name: "Deaths:", stat: obj.allTime.deaths},
+                {name: "Kill Death Ratio:", stat: obj.allTime.killDeathRatio},
+                {name: "Wins:", stat: obj.allTime.wins},
+                {name: "Losses:", stat: obj.allTime.losses},
+                {name: "Win %:", stat: (obj.allTime.winRatio * 100) + '%'},
+            ])
+
         })
 
         getRecentMatchesGame(name, gameModes[value]).then((obj) => {
@@ -57,7 +74,42 @@ export default function PlayerPage(props) {
 
         })
 
-    }, [value])
+        getRecentMatches(name).then((obj) => {
+
+            var streak = 0;
+
+            var gStreak = [];
+            var gKD = [];
+            var gKills = [];
+
+            obj.matches.forEach((obj, index) => {
+                
+                if(obj.won) {
+
+                    streak++;
+
+                } else {
+
+                    streak--;
+
+                }
+
+                gStreak.push({name: index, stat: streak});
+                gKills.push({name: index, stat: obj.kills})
+                gKD.push({name: index, stat: obj.killDeathRatio})
+
+                
+
+            })
+
+            setGraphStreak(gStreak)
+            setGraphKD(gKD)
+            setGraphKills(gKills)
+
+        })
+
+
+    }, [value, name])
 
     return(
 
@@ -73,67 +125,45 @@ export default function PlayerPage(props) {
                         <Typography style={{color: "black"}}variant="h2">{user.user.gamertag}</Typography>
                         <Typography style={{color: "black"}}variant="h4">{user.user.clanTag}</Typography>
                     </Grid>
+                    <Grid item xs={5}></Grid>
+                    <Grid item xs={2}>
+                        <img src={user.user.avatar} alt="avatar" style={{height: 120, paddingTop: 20}}></img>
+                    </Grid>
                 </Grid>
             </Paper>
             <Grid container spacing={4} direction={"row"} style={{marginTop: 20}}>
                 <Grid item xs={4}>
-                    <Paper elevation={3} style={{width: 270, background: "#DCDCDC"}}>
+                    <Grid item xs={4}>
+                    <Paper elevation={3} style={{width: 375, background: "#DCDCDC"}}>
                         <List>
                             <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
+                                <Paper elevation={2} style={{padding: 5, width: 350}}>
                                     <Typography style={{color: "black"}}>Career Stats</Typography>
                                 </Paper>
                             </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Playtime: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.timePlayed}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Games Played: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.gamesPlayed}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Kills: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.kills}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Deaths: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.deaths}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Kill Death Ratio: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.killDeathRatio}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Wins: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.wins}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>Losses: </Typography>
-                                    <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{user.allTime.losses}</Typography>
-                                </Paper>
-                            </ListItem>
-                            <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 250}}>
-                                    <Typography display="inline" style={{color: "black", float: "left"}}>Win %: </Typography>
-                                    <Typography display="inline" style={{color: "black", float: "right"}}>{user.allTime.winRatio * 100}%</Typography>
-                                </Paper>
-                            </ListItem>
+                            {
+                            careerStats.map((obj) => {
+
+                                return(
+
+                                    <ListItem>
+                                        <Paper elevation={2} style={{padding: 5, width: 375}}>
+                                            <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>{obj.name} </Typography>
+                                            <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{obj.stat}</Typography>
+                                        </Paper>
+                                    </ListItem>
+
+                                    )
+                                })
+                            }
                         </List>
                     </Paper>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <LineGraph stat={graphKD} name="Kill Death Ratio"></LineGraph>
+                        <LineGraph stat={graphKills} name="Kills"></LineGraph>
+                        <LineGraph stat={graphStreak} name="Wins"></LineGraph>
+                    </Grid>
                 </Grid>
                 <Grid item xs={8}>
                     <Paper style={{background: "#D3D3D3"}}>
@@ -141,7 +171,7 @@ export default function PlayerPage(props) {
                             <Tab label="Slayer"></Tab>
                             <Tab label="CTF"></Tab>
                             <Tab label="Extraction"></Tab>
-                            <Tab label="Dominion"></Tab>
+                            <Tab label="King Of The Hill"></Tab>
                             <Tab label="Assault"></Tab>
                         </Tabs>
                         {loaded && 
@@ -151,7 +181,7 @@ export default function PlayerPage(props) {
                                 {
                                     matches.map((obj) => {
 
-                                        return(<GameStats data={obj} />)
+                                        return(<GameStats data={obj} key={obj.date}/>)
 
                                     })
                                 }
@@ -161,7 +191,7 @@ export default function PlayerPage(props) {
                                 {
                                     matches.map((obj) => {
 
-                                        return(<GameStats data={obj} />)
+                                        return(<GameStats data={obj} key={obj.date}/>)
 
                                     })
                                 }
@@ -171,17 +201,17 @@ export default function PlayerPage(props) {
                                 {
                                     matches.map((obj) => {
 
-                                        return(<GameStats data={obj} />)
+                                        return(<GameStats data={obj} key={obj.date}/>)
 
                                     })
                                 }
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                <GameSummary gamertag={user.user.gamertag} game={"Dominion"}></GameSummary>
+                                <GameSummary gamertag={user.user.gamertag} game={"King Of The Hill"}></GameSummary>
                                 {
                                     matches.map((obj) => {
 
-                                        return(<GameStats data={obj} />)
+                                        return(<GameStats data={obj} key={obj.date}/>)
 
                                     })
                                 }
@@ -191,7 +221,7 @@ export default function PlayerPage(props) {
                                 {
                                     matches.map((obj) => {
 
-                                        return(<GameStats data={obj} />)
+                                        return(<GameStats data={obj} key={obj.date}/>)
 
                                     })
                                 }
@@ -202,6 +232,7 @@ export default function PlayerPage(props) {
                 </Grid>
             </Grid>
             </div> }  
+            
         </Container>
     )
 

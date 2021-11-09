@@ -27,20 +27,7 @@ export default function HaloDataGrid() {
 
     const classes = useStyles();
     const history = useHistory();
-    const users = [
-        "Not Ajtiger2", 
-        "Flyingcow10", 
-        "ShantiPanti", 
-        "nutmusprime", 
-        "KiingBooty", 
-        "Garth Tim", 
-        "Neon Space 2788", 
-        "Loopszs", 
-        "CantoeKnees", 
-        "GrumpierCone733", 
-        "Cook5953",
-        "AJR808",
-    ];
+    
 
     const [player, setPlayer] = React.useState([]);
     const [rows, setRows] = React.useState([]);
@@ -61,6 +48,21 @@ export default function HaloDataGrid() {
 
     React.useEffect(() => {
 
+        const users = [
+            "Not Ajtiger2", 
+            "Flyingcow10", 
+            "ShantiPanti", 
+            "nutmusprime", 
+            "KiingBooty", 
+            "Garth Tim", 
+            "Neon Space 2788", 
+            "Loopszs", 
+            "CantoeKnees", 
+            "GrumpierCone733", 
+            "Cook5953",
+            "AJR808",
+        ];
+
         setPlayer([]);
         setRows([]);
 
@@ -68,25 +70,27 @@ export default function HaloDataGrid() {
 
             getPlayerInfo(user).then((obj) => {
 
-                setPlayer(player => [...player, obj])
-                
-                var kpg = (obj.allTime.kills/obj.allTime.gamesPlayed).toFixed(2)
+                if(obj.allTime.gamesPlayed !== 0) {
 
-                var row = {
-                    id: index, 
-                    col1: obj.user.gamertag, 
-                    col2: obj.allTime.timePlayed, 
-                    col3: obj.allTime.gamesPlayed, 
-                    col4: obj.allTime.wins, 
-                    col5: obj.allTime.losses, 
-                    col6: obj.allTime.kills, 
-                    col7: obj.allTime.deaths, 
-                    col8: obj.allTime.killDeathRatio,
-                    col9: kpg
+                    var kpg = (obj.allTime.kills/obj.allTime.gamesPlayed).toFixed(2)
+
+                    var row = {
+                        id: index, 
+                        col1: obj.user.gamertag, 
+                        col2: obj.allTime.timePlayed, 
+                        col3: obj.allTime.gamesPlayed, 
+                        col4: obj.allTime.wins, 
+                        col5: obj.allTime.losses, 
+                        col6: obj.allTime.kills, 
+                        col7: obj.allTime.deaths, 
+                        col8: obj.allTime.killDeathRatio,
+                        col9: kpg
+                    }
+
+                    setPlayer(player => [...player, obj])
+                    setRows(rows => [...rows, row]);
+
                 }
-
-                setRows(rows => [...rows, row]);
-
             })
 
             

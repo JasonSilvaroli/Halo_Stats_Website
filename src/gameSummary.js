@@ -15,8 +15,6 @@ export default function GameSummary(props) {
 
     useEffect(() => {
 
-        //console.log(game)
-
         getRecentMatchesGame(name, game).then((obj) => {
 
             setGamemode(obj);
@@ -29,7 +27,7 @@ export default function GameSummary(props) {
 
         })
 
-    }, [])
+    }, [game, name])
 
     function summaryOfGames(matches) {
 
@@ -68,11 +66,21 @@ export default function GameSummary(props) {
 
     }
 
-    return(
+    if(!loaded) {
 
-        <Paper elevation={3} style={{marginTop: 10, background: "#DCDCDC"}}>
-            {loaded &&
-            <div>
+        console.log("loading")
+        
+        return (
+
+            <Paper elevation={3} style={{marginTop: 10, background: "#DCDCDC", paddingBottom: 20}}>
+                <Typography style={{color: "black", margin: 5, paddingTop: 10}}>Loading...</Typography>
+            </Paper>
+
+        )
+        } else {
+        return(
+
+            <Paper elevation={3} style={{marginTop: 10, background: "#DCDCDC", paddingBottom: 20}}>
                 <Typography style={{color: "black", margin: 5, paddingTop: 10}}>Summary of {gameMode.length} {game} games</Typography>
                 <Grid container direction={"row"}>
                     <Grid item xs={3} style={{padding: 0}}>
@@ -124,9 +132,7 @@ export default function GameSummary(props) {
                         </List>
                     </Grid>
                 </Grid>
-            </div>
-            }
-        </Paper>
-    )
-
+            </Paper>
+        )
+    }
 }
