@@ -49,7 +49,7 @@ export default function NavBar() {
                             <MenuItem onClick={goTo("")}>Home</MenuItem>
                         </Menu>
                     <Typography variant="h6" noWrap style={{width: 300}}>
-                        PC Master Race Halo
+                        The Domain
                     </Typography>
                     <div style={{marginLeft: 1300, marginTop: 10}}>
                         <TextField inputProps={{className: classes.root}} placeholder="Search..." onKeyDown={keyPress}></TextField>
