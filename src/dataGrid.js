@@ -61,6 +61,7 @@ export default function HaloDataGrid() {
             "GrumpierCone733", 
             "Cook5953",
             "AJR808",
+            "QueenBoooty"
         ];
 
         setPlayer([]);
