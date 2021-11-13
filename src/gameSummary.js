@@ -67,8 +67,6 @@ export default function GameSummary(props) {
     }
 
     if(!loaded) {
-
-        console.log("loading")
         
         return (
 

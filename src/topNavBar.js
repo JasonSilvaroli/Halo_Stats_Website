@@ -41,7 +41,7 @@ export default function NavBar() {
     return(
         <Container style={{paddingBottom: 100}}>
             <AppBar className="container-fluid">
-                <Toolbar>
+                <Toolbar style={{background: "#616161"}}>
                         <Button onClick={(e) => setOpenMenu(e.currentTarget)}>
                             <GridMenuIcon />
                         </Button>

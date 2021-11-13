@@ -1,14 +1,15 @@
 import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import makeStyles from '@material-ui/styles/makeStyles'
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { Container } from '@material-ui/core';
 import { getPlayerInfo } from './getData';
 
 const useStyles = makeStyles({
 
     root: {
-        background:'#AFC7D0'
+        background:'#AFC7D0',
+        color: "#E0E0E0"
     },
     row: {
         color: '#EEF1E6',
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
             background: '#F9665E'
         },
         textAlign: "center",
-    }
+    },
 
 }, { name: 'MuiDataGrid'});
 
@@ -27,10 +28,11 @@ export default function HaloDataGrid() {
 
     const classes = useStyles();
     const history = useHistory();
-    
 
     const [player, setPlayer] = React.useState([]);
     const [rows, setRows] = React.useState([]);
+    const [redirect, setRedirect] = React.useState(false);
+    const [user, setUser] = React.useState([]);
 
     const columns = [
 
@@ -93,17 +95,24 @@ export default function HaloDataGrid() {
 
                 }
             })
-
-            
         })
-
     }, [])
+
+    function setPath(name, id) {
+
+        setUser([name, id]);
+        setRedirect(true);
+
+    }
+
+    if(!redirect) {
 
     return(
         <Container>
         <div style={{ display: 'flex'}}>
             <div style={{flexGrow: 1}}>
             <DataGrid 
+                style={{background: "#424242", color: "#E0E0E0"}}
                 InputProps={{className: classes.row}}
                 autoHeight 
                 rows={rows} 
@@ -112,10 +121,19 @@ export default function HaloDataGrid() {
                 rowsPerPageOptions={[5]}
                 disableSelectionOnClick
                 disableColumnFilter 
-                onRowDoubleClick={(params, event) => { history.push("/user/" + params.row.col1, player[params.id])}}
+                onRowDoubleClick={(params, event) => { setPath(params.row.col1, player[params.id])}}
             />
             </div>
         </div>
         </Container>
     )
+    } else {
+
+        console.log(user);
+
+        return(
+            <Redirect to={{pathname: "/user/" + user[0], state: {player: player[user[1]]}}}></Redirect>
+        )
+
+    }
 }

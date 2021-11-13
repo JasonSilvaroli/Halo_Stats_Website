@@ -6,8 +6,6 @@ export default function LineGraph(props) {
 
     var data = props.stat
 
-    console.log(props.stat.length)
-
     if(props.stat.length > 0) {
 
     } else {

@@ -62,7 +62,7 @@ export default function PlayerPage(props) {
                 {name: "Kill Death Ratio:", stat: obj.allTime.killDeathRatio},
                 {name: "Wins:", stat: obj.allTime.wins},
                 {name: "Losses:", stat: obj.allTime.losses},
-                {name: "Win %:", stat: (obj.allTime.winRatio * 100) + '%'},
+                {name: "Win %:", stat: (obj.allTime.winRatio * 100).toFixed(0) + '%'},
             ])
 
         })
@@ -142,11 +142,11 @@ export default function PlayerPage(props) {
                                 </Paper>
                             </ListItem>
                             {
-                            careerStats.map((obj) => {
+                            careerStats.map((obj, index) => {
 
                                 return(
 
-                                    <ListItem>
+                                    <ListItem key={index}>
                                         <Paper elevation={2} style={{padding: 5, width: 375}}>
                                             <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>{obj.name} </Typography>
                                             <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{obj.stat}</Typography>
