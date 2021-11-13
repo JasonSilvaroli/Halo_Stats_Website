@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import makeStyles from '@material-ui/styles/makeStyles'
-import { Redirect, useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 import { Container } from '@material-ui/core';
 import { getPlayerInfo } from './getData';
 
@@ -27,7 +27,6 @@ const useStyles = makeStyles({
 export default function HaloDataGrid() {
 
     const classes = useStyles();
-    const history = useHistory();
 
     const [player, setPlayer] = React.useState([]);
     const [rows, setRows] = React.useState([]);

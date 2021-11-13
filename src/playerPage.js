@@ -4,6 +4,7 @@ import GameStats from './gameStats';
 import GameSummary from './gameSummary';
 import { getPlayerInfo, getRecentMatches, getRecentMatchesGame } from './getData';
 import LineGraph from './lineGraph';
+import ProgressBar from './progressBar';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,6 +55,8 @@ export default function PlayerPage(props) {
 
             setUser(obj);
 
+            console.log(obj.user.rank)
+
             setCareerStats([
                 {name: "Playtime:", stat: obj.allTime.timePlayed},
                 {name: "Games Played:", stat: obj.allTime.gamesPlayed},
@@ -82,7 +85,11 @@ export default function PlayerPage(props) {
             var gKD = [];
             var gKills = [];
 
-            obj.matches.forEach((obj, index) => {
+            gStreak.push({name: 0, stat: 0});
+            gKills.push({name: 0, stat: 0})
+            gKD.push({name: 0, stat: 0})
+
+            obj.matches.reverse().forEach((obj, index) => {
                 
                 if(obj.won) {
 
@@ -93,6 +100,7 @@ export default function PlayerPage(props) {
                     streak--;
 
                 }
+
 
                 gStreak.push({name: index, stat: streak});
                 gKills.push({name: index, stat: obj.kills})
@@ -113,7 +121,7 @@ export default function PlayerPage(props) {
 
     return(
 
-        <Container >
+        <Container>
             { user.user !== undefined &&
             <div>
             <Paper elevation={3} style={{background: "#DCDCDC"}}>
@@ -121,11 +129,11 @@ export default function PlayerPage(props) {
                     <Grid item xs={2}>
                         <img src={user.user.emblem} alt="emblem" style={{height: 120, paddingTop: 20}}></img>
                     </Grid>
-                    <Grid item xs={3} >
+                    <Grid item xs={6} >
                         <Typography style={{color: "black"}}variant="h2">{user.user.gamertag}</Typography>
                         <Typography style={{color: "black"}}variant="h4">{user.user.clanTag}</Typography>
                     </Grid>
-                    <Grid item xs={5}></Grid>
+                    <Grid item xs={2}></Grid>
                     <Grid item xs={2}>
                         <img src={user.user.avatar} alt="avatar" style={{height: 120, paddingTop: 20}}></img>
                     </Grid>
@@ -137,7 +145,7 @@ export default function PlayerPage(props) {
                     <Paper elevation={3} style={{width: 375, background: "#DCDCDC"}}>
                         <List>
                             <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 350}}>
+                                <Paper elevation={2} style={{padding: 5, width: 375}}>
                                     <Typography style={{color: "black"}}>Career Stats</Typography>
                                 </Paper>
                             </ListItem>
@@ -158,6 +166,23 @@ export default function PlayerPage(props) {
                             }
                         </List>
                     </Paper>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Paper elevation={3} style={{width: 375, background: "#DCDCDC", paddingTop: 1, marginTop: 20}}>
+                            <Grid container>
+                                <Grid item xs={9}>
+                            <Typography style={{marginTop: 10}}>Rank</Typography>
+                            <Typography style={{marginTop: 10}}>{user.user.rank.title}, Tour {user.user.rank.tour}, Tier {user.user.rank.tier}</Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <img src={user.user.rank.image_url} alt="emblem" style={{height: 60, paddingTop: 20}}></img>
+                            </Grid>
+                            </Grid>
+                            <Typography style={{marginTop: 10, paddingBottom: 5}}>XP Remaining</Typography>
+                            <ProgressBar key={"1"} bgcolor="#0000FF" completed={(user.user.rank.remainingxp / user.user.rank.totalXPToRankUp)*100}/>
+                            <Typography style={{color: "black"}}>{user.user.rank.remainingxp}/{user.user.rank.totalXPToRankUp}</Typography>
+
+                        </Paper>
                     </Grid>
                     <Grid item xs={4}>
                         <LineGraph stat={graphKD} name="Kill Death Ratio"></LineGraph>

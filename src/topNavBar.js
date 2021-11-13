@@ -1,7 +1,7 @@
-import { AppBar, Button, Container, makeStyles, Menu, MenuItem, TextField, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Container, Grid, makeStyles, Menu, MenuItem, TextField, Toolbar, Typography } from '@material-ui/core';
 import { GridMenuIcon } from '@material-ui/data-grid';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles ({
 
@@ -15,13 +15,17 @@ export default function NavBar() {
 
     const classes = useStyles();
 
+    const [redirectTo, setRedirectTo] = React.useState(false);
+    const [path, setPath] = React.useState("");
     const [openMenu, setOpenMenu] = React.useState(null);
-    const history = useHistory();
 
     const keyPress = (e) => {
 
+        console.log("w")
+
         if(e.keyCode === 13) {
-            history.push('/user/' + e.target.value)
+            setPath("/user/" + e.target.value)
+            setRedirectTo(true)
         }
 
     }
@@ -32,31 +36,45 @@ export default function NavBar() {
 
     }
 
-    const goTo = (obj) => {
+    if(!redirectTo) {
 
-        history.push("/" + obj)
+        return(
+            <Container style={{paddingBottom: 100}}>
+                <AppBar className="container-fluid">
+                    <Toolbar style={{background: "#616161"}}>
+                        <Grid container spacing={4} direction={"row"} alignItems={"center"}>
+                            <Grid item xs={1}>
+                                <Button onClick={(e) => setOpenMenu(e.currentTarget)}>
+                                    <GridMenuIcon />
+                                </Button>
+                                <Menu anchorEl={openMenu} keepMounted open={Boolean(openMenu)} onClose={menuClose} >
+                                    <Link onClick={() => menuClose()} style={{color: "#000000", textDecoration: 'none'}} to="/home"><MenuItem >Home</MenuItem></Link>
+                                    <Link onClick={() => menuClose()} style={{color: "#000000", textDecoration: 'none'}} to="/about"><MenuItem >About</MenuItem></Link>
+                                    <Link onClick={() => menuClose()} style={{color: "#000000", textDecoration: 'none'}} to="/search"><MenuItem >Search</MenuItem></Link>
+                                </Menu>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Typography variant="h6" noWrap style={{width: 300}}>
+                                    The Domain
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={7} />
+                            <Grid item xs={2}>
+                                    <TextField inputProps={{className: classes.root}} placeholder="Search..." onKeyDown={keyPress}></TextField>
+                            </Grid>
+                        </Grid>
+                    </Toolbar>
+                </AppBar>
+            </Container>
+        )
+    } else {
+
+        return (
+
+            <Redirect to={{pathname: path}}></Redirect>
+
+        )
 
     }
-
-    return(
-        <Container style={{paddingBottom: 100}}>
-            <AppBar className="container-fluid">
-                <Toolbar style={{background: "#616161"}}>
-                        <Button onClick={(e) => setOpenMenu(e.currentTarget)}>
-                            <GridMenuIcon />
-                        </Button>
-                        <Menu anchorEl={openMenu} keepMounted open={Boolean(openMenu)} onClose={menuClose} >
-                            <MenuItem onClick={goTo("")}>Home</MenuItem>
-                        </Menu>
-                    <Typography variant="h6" noWrap style={{width: 300}}>
-                        The Domain
-                    </Typography>
-                    <div style={{marginLeft: 1300, marginTop: 10}}>
-                        <TextField inputProps={{className: classes.root}} placeholder="Search..." onKeyDown={keyPress}></TextField>
-                    </div>
-                </Toolbar>
-            </AppBar>
-        </Container>
-    )
 
 }
