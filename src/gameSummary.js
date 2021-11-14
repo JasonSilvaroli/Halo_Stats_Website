@@ -3,8 +3,6 @@ import React, { useEffect } from "react";
 import { getRecentMatchesGame } from "./getData";
 import WinPieChart from "./pieChart";
 
-
-
 export default function GameSummary(props) {
 
     const name = props.gamertag;

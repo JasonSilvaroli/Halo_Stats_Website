@@ -43,7 +43,7 @@ export default function NavBar() {
                 <AppBar className="container-fluid">
                     <Toolbar style={{background: "#616161"}}>
                         <Grid container spacing={4} direction={"row"} alignItems={"center"}>
-                            <Grid item xs={0.5}>
+                            <Grid item xs={1}>
                                 <Button onClick={(e) => setOpenMenu(e.currentTarget)}>
                                     <GridMenuIcon />
                                 </Button>
@@ -58,7 +58,7 @@ export default function NavBar() {
                                     The Domain
                                 </Typography>
                             </Grid>
-                            <Grid item xs={7} />
+                            <Grid item xs={8} />
                             <Grid item xs={2}>
                                     <TextField inputProps={{className: classes.root}} placeholder="Search..." onKeyDown={keyPress}></TextField>
                             </Grid>

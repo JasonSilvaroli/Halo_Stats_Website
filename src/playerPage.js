@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box } from '@material-ui/core';
+import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box, Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import GameStats from './gameStats';
 import GameSummary from './gameSummary';
@@ -55,8 +55,6 @@ export default function PlayerPage(props) {
 
             setUser(obj);
 
-            console.log(obj.user.rank)
-
             setCareerStats([
                 {name: "Playtime:", stat: obj.allTime.timePlayed},
                 {name: "Games Played:", stat: obj.allTime.gamesPlayed},
@@ -77,46 +75,51 @@ export default function PlayerPage(props) {
 
         })
 
-        getRecentMatches(name).then((obj) => {
+        if(user.good) {
 
-            var streak = 0;
+            console.log("good")
 
-            var gStreak = [];
-            var gKD = [];
-            var gKills = [];
+            getRecentMatches(name).then((obj) => {
 
-            gStreak.push({name: 0, stat: 0});
-            gKills.push({name: 0, stat: 0})
-            gKD.push({name: 0, stat: 0})
+                var streak = 0;
 
-            obj.matches.reverse().forEach((obj, index) => {
-                
-                if(obj.won) {
+                var gStreak = [];
+                var gKD = [];
+                var gKills = [];
 
-                    streak++;
+                gStreak.push({name: 0, stat: 0});
+                gKills.push({name: 0, stat: 0})
+                gKD.push({name: 0, stat: 0})
 
-                } else {
+                obj.matches.reverse().forEach((obj, index) => {
+                    
+                    if(obj.won) {
 
-                    streak--;
+                        streak++;
 
-                }
+                    } else {
 
-                gStreak.push({name: index, stat: streak});
-                gKills.push({name: index, stat: obj.kills})
-                gKD.push({name: index, stat: obj.killDeathRatio})
+                        streak--;
 
-                
+                    }
+
+                    gStreak.push({name: index, stat: streak});
+                    gKills.push({name: index, stat: obj.kills})
+                    gKD.push({name: index, stat: obj.killDeathRatio})
+
+                    
+
+                })
+
+                setGraphStreak(gStreak)
+                setGraphKD(gKD)
+                setGraphKills(gKills)
 
             })
-
-            setGraphStreak(gStreak)
-            setGraphKD(gKD)
-            setGraphKills(gKills)
-
-        })
+        }
 
 
-    }, [value, name])
+    }, [value, name, user.good])
 
     return(
 
@@ -138,6 +141,7 @@ export default function PlayerPage(props) {
                     </Grid>
                 </Grid>
             </Paper>
+            
             <Grid container spacing={4} direction={"row"} style={{marginTop: 20}}>
                 <Grid item xs={4}>
                     <Grid item xs={4}>
@@ -191,11 +195,12 @@ export default function PlayerPage(props) {
                             <Tab label="King Of The Hill"></Tab>
                             <Tab label="Assault"></Tab>
                         </Tabs>
-                        {loaded && 
+                        {loaded && user.good &&
                         <div>
                             <TabPanel value={value} index={0}>
                                 <GameSummary gamertag={user.user.gamertag} game={"Slayer"}></GameSummary>
-                                {
+                                {user.good &&
+
                                     matches.map((obj) => {
 
                                         return(<GameStats data={obj} key={obj.date}/>)
@@ -205,7 +210,8 @@ export default function PlayerPage(props) {
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <GameSummary gamertag={user.user.gamertag} game={"CTF"}></GameSummary>
-                                {
+                                {user.good &&
+
                                     matches.map((obj) => {
 
                                         return(<GameStats data={obj} key={obj.date}/>)
@@ -215,7 +221,8 @@ export default function PlayerPage(props) {
                             </TabPanel>
                             <TabPanel value={value} index={2}>
                                 <GameSummary gamertag={user.user.gamertag} game={"Extraction"}></GameSummary>
-                                {
+                                {user.good &&
+
                                     matches.map((obj) => {
 
                                         return(<GameStats data={obj} key={obj.date}/>)
@@ -225,7 +232,7 @@ export default function PlayerPage(props) {
                             </TabPanel>
                             <TabPanel value={value} index={3}>
                                 <GameSummary gamertag={user.user.gamertag} game={"King Of The Hill"}></GameSummary>
-                                {
+                                {user.good &&
                                     matches.map((obj) => {
 
                                         return(<GameStats data={obj} key={obj.date}/>)
@@ -235,7 +242,8 @@ export default function PlayerPage(props) {
                             </TabPanel>
                             <TabPanel value={value} index={4}>
                                 <GameSummary gamertag={user.user.gamertag} game={"Assault"}></GameSummary>
-                                {
+                                {user.good &&
+
                                     matches.map((obj) => {
 
                                         return(<GameStats data={obj} key={obj.date}/>)

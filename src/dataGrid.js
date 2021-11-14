@@ -2,7 +2,7 @@ import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Redirect } from 'react-router';
-import { Container } from '@material-ui/core';
+import { Container, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { getPlayerInfo } from './getData';
 
 
@@ -33,6 +33,8 @@ export default function HaloDataGrid() {
     const [rows, setRows] = React.useState([]);
     const [redirect, setRedirect] = React.useState(false);
     const [user, setUser] = React.useState([]);
+
+    const [count, setCount] = React.useState(10);
 
     const columns = [
 
@@ -105,26 +107,45 @@ export default function HaloDataGrid() {
 
     }
 
+    const handleChangeCount = (event) => {
+
+        setCount(event.target.value)
+
+    }
+
     if(!redirect) {
 
     return(
         <Container>
-        <div style={{ display: 'flex'}}>
-            <div style={{flexGrow: 1}}>
-            <DataGrid 
-                style={{background: "#424242", color: "#E0E0E0"}}
-                InputProps={{className: classes.row}}
-                autoHeight 
-                rows={rows} 
-                columns={columns} 
-                pageSize={10}
-                rowsPerPageOptions={[5]}
-                disableSelectionOnClick
-                disableColumnFilter 
-                onRowDoubleClick={(params, event) => { setPath(params.row.col1, player[params.id])}}
-            />
+            <div style={{ display: 'flex'}}>
+                <div style={{flexGrow: 1}}>
+                <DataGrid 
+                    style={{background: "#424242", color: "#E0E0E0"}}
+                    InputProps={{className: classes.row}}
+                    autoHeight 
+                    rows={rows} 
+                    columns={columns} 
+                    pageSize={count}
+                    rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                    disableColumnFilter 
+                    onRowDoubleClick={(params, event) => { setPath(params.row.col1, player[params.id])}}
+                />
+                </div>
             </div>
-        </div>
+            <FormControl style={{color: "#E0E0E0"}}>
+                <InputLabel style={{background: "#424242", fontSize: 20, width: 150, color: "#E0E0E0"}}>Page Count</InputLabel>
+                <Select
+                style={{background: "#424242", color: "#E0E0E0"}}
+                    value={count}
+                    label={count}
+                    onChange={handleChangeCount}
+                >
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={50}>50</MenuItem>
+                </Select>
+            </FormControl>
         </Container>
     )
     } else {
