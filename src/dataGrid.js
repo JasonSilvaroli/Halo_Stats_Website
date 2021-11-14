@@ -5,11 +5,12 @@ import { Redirect } from 'react-router';
 import { Container } from '@material-ui/core';
 import { getPlayerInfo } from './getData';
 
+
 const useStyles = makeStyles({
 
     root: {
         background:'#AFC7D0',
-        color: "#E0E0E0"
+        color: "#E0E0E0",
     },
     row: {
         color: '#EEF1E6',

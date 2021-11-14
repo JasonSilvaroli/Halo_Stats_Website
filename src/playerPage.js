@@ -101,7 +101,6 @@ export default function PlayerPage(props) {
 
                 }
 
-
                 gStreak.push({name: index, stat: streak});
                 gKills.push({name: index, stat: obj.kills})
                 gKD.push({name: index, stat: obj.killDeathRatio})
@@ -169,17 +168,10 @@ export default function PlayerPage(props) {
                     </Grid>
                     <Grid item xs={4}>
                         <Paper elevation={3} style={{width: 375, background: "#DCDCDC", paddingTop: 1, marginTop: 20}}>
-                            <Grid container>
-                                <Grid item xs={9}>
                             <Typography style={{marginTop: 10}}>Rank</Typography>
                             <Typography style={{marginTop: 10}}>{user.user.rank.title}, Tour {user.user.rank.tour}, Tier {user.user.rank.tier}</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <img src={user.user.rank.image_url} alt="emblem" style={{height: 60, paddingTop: 20}}></img>
-                            </Grid>
-                            </Grid>
                             <Typography style={{marginTop: 10, paddingBottom: 5}}>XP Remaining</Typography>
-                            <ProgressBar key={"1"} bgcolor="#0000FF" completed={(user.user.rank.remainingxp / user.user.rank.totalXPToRankUp)*100}/>
+                            <ProgressBar key={"1"} bgcolor="#0000FF" completed={(user.user.rank.remainingxp/user.user.rank.totalXPToRankUp)*100}/>
                             <Typography style={{color: "black"}}>{user.user.rank.remainingxp}/{user.user.rank.totalXPToRankUp}</Typography>
 
                         </Paper>

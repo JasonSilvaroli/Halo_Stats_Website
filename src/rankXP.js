@@ -1,4 +1,40 @@
-const rankXP = {
+export const rankNames = {
+
+    "1": "Rookie",
+    "2": "Recruit",
+    "3": "Private",
+    "4": "Private Second Class",
+    "5": "Private First Class",
+    "6": "Lance Corporal",
+    "7": "Corporal",
+    "8": "Sergeant",
+    "9": "Sergeant Second Class",
+    "10": "Sergeant First Class",
+    "11": "Staff Sergeant",
+    "12": "Gunnery Sergeant",
+    "13": "Master Sergeant",
+    "14": "Sergeant Major",
+    "15": "Command Sergeant Major",
+    "16": "Warrant Officer",
+    "17": "Warrant Officer Third Class",
+    "18": "Warrant Officer Second Class",
+    "19": "Warrant Officer First Class",
+    "20": "Chief Warrant Officer",
+    "21": "Second Lieutenant",
+    "22": "First Lieutenant",
+    "23": "Captain",
+    "24": "Major",
+    "25": "Lieutenant Colonel",
+    "26": "Colonel",
+    "27": "Brigadier General",
+    "28": "Major General",
+    "29": "Lieutenant General",
+    "30": "General",
+    
+
+}
+
+export const rankXP = {
     "1": 
         {
             "1": "0",
@@ -305,5 +341,3 @@ const rankXP = {
             "30": "--- ? ---"
         }
 }
-
-export default rankXP;

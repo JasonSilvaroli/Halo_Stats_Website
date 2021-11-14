@@ -43,7 +43,7 @@ export default function NavBar() {
                 <AppBar className="container-fluid">
                     <Toolbar style={{background: "#616161"}}>
                         <Grid container spacing={4} direction={"row"} alignItems={"center"}>
-                            <Grid item xs={1}>
+                            <Grid item xs={0.5}>
                                 <Button onClick={(e) => setOpenMenu(e.currentTarget)}>
                                     <GridMenuIcon />
                                 </Button>
@@ -53,8 +53,8 @@ export default function NavBar() {
                                     <Link onClick={() => menuClose()} style={{color: "#000000", textDecoration: 'none'}} to="/search"><MenuItem >Search</MenuItem></Link>
                                 </Menu>
                             </Grid>
-                            <Grid item xs={2}>
-                                <Typography variant="h6" noWrap style={{width: 300}}>
+                            <Grid item xs={1}>
+                                <Typography variant="h6" noWrap>
                                     The Domain
                                 </Typography>
                             </Grid>

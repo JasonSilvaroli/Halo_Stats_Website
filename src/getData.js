@@ -1,4 +1,4 @@
-import rankXP from "./rankXP";
+import { rankXP, rankNames } from "./rankXP";
 
 export async function getPlayerInfo(name) {
 
@@ -45,13 +45,15 @@ export async function getPlayerInfo(name) {
     let playerXP = await responseXp.json()
 
     player.user.gamertag = playerXP.additional.gamertag;
-    player.user.rank.title = playerXP.data.level.title;
-    player.user.rank.tour = playerXP.data.level.tour;
-    player.user.rank.tier = playerXP.data.level.tier;
-    player.user.rank.image_url = playerXP.data.image_url;
-    player.user.rank.totalxp = playerXP.data.total;
-    player.user.rank.remainingxp = playerXP.data.remaining;
-    player.user.rank.totalXPToRankUp = rankXP[playerXP.data.level.tour][(playerXP.data.level.tier - (playerXP.data.level.tour * 30) + 31)] - rankXP[playerXP.data.level.tour][(playerXP.data.level.tier - (playerXP.data.level.tour * 30) + 30)];
+    player.user.rank.title = rankNames[playerXP.data.rank.current %30]
+    player.user.rank.tour = Number((playerXP.data.rank.current / 30).toFixed(0))
+    player.user.rank.tier = playerXP.data.rank.current %30
+    //player.user.rank.image_url = playerXP.data.image_url;
+    player.user.rank.totalxp = playerXP.data.xp.total;
+    player.user.rank.remainingxp = rankXP[player.user.rank.tour][ player.user.rank.tier+1] - playerXP.data.xp.total;
+    player.user.rank.totalXPToRankUp = rankXP[player.user.rank.tour][ player.user.rank.tier + 1] - rankXP[player.user.rank.tour][ player.user.rank.tier];
+
+    console.log(player.user.rank)
 
     let responseSR = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/service-record", {
         headers: {
