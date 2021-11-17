@@ -1,6 +1,6 @@
 import { Grid, List, ListItem, Paper, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { getRecentMatchesGame } from "./getData";
+import { getRecentMatchesGame } from "./getDataMCC";
 import WinPieChart from "./pieChart";
 
 export default function GameSummary(props) {

@@ -1,8 +1,8 @@
-import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box, Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
+import { Container, Typography, Grid, Paper, List, ListItem, Tabs, Tab, Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import GameStats from './gameStats';
 import GameSummary from './gameSummary';
-import { getPlayerInfo, getRecentMatches, getRecentMatchesGame } from './getData';
+import { getPlayerInfo, getRecentMatches, getRecentMatchesGame } from './getDataMCC';
 import LineGraph from './lineGraph';
 import ProgressBar from './progressBar';
 
@@ -26,7 +26,7 @@ function TabPanel(props) {
     );
   }
 
-export default function PlayerPage(props) {
+export default function PlayerPage() {
 
     const [value, setValue] = React.useState(0);
     const [user, setUser] = React.useState({})
@@ -38,7 +38,7 @@ export default function PlayerPage(props) {
     const [graphKills, setGraphKills] = React.useState([]);
     const [graphStreak, setGraphStreak] = React.useState([]);
 
-    var name  = window.location.pathname.split('/')[2];
+    var name  = window.location.pathname.split('/')[3];
 
     const handleChange = (event, newValue) => {
 

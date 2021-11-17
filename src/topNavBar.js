@@ -24,7 +24,7 @@ export default function NavBar() {
         console.log("w")
 
         if(e.keyCode === 13) {
-            setPath("/user/" + e.target.value)
+            setPath("/mcc/user/" + e.target.value)
             setRedirectTo(true)
         }
 
@@ -54,7 +54,7 @@ export default function NavBar() {
                                 </Menu>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography variant="h6" noWrap>
+                                <Typography variant="h6">
                                     The Domain
                                 </Typography>
                             </Grid>

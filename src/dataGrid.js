@@ -2,8 +2,8 @@ import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Redirect } from 'react-router';
-import { Container, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { getPlayerInfo } from './getData';
+import { Button, Container, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { getPlayerInfo } from './getDataMCC';
 
 
 const useStyles = makeStyles({
@@ -146,6 +146,9 @@ export default function HaloDataGrid() {
                     <MenuItem value={50}>50</MenuItem>
                 </Select>
             </FormControl>
+            <Button href="/hi/user/Flyingcow10">
+                test
+            </Button>
         </Container>
     )
     } else {
@@ -153,7 +156,7 @@ export default function HaloDataGrid() {
         console.log(user);
 
         return(
-            <Redirect to={{pathname: "/user/" + user[0], state: {player: player[user[1]]}}}></Redirect>
+            <Redirect to={{pathname: "/mcc/user/" + user[0], state: {player: player[user[1]]}}}></Redirect>
         )
 
     }

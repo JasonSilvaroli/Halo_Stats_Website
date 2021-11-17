@@ -9,6 +9,7 @@ import {
 import PlayerPage from './playerPage';
 import NavBar from './topNavBar';
 import HaloDataGrid from './dataGrid';
+import PlayerPageInfinite from './playerPageInfinite';
 
 function App() {
   return (
@@ -23,12 +24,16 @@ function App() {
           <Route name="about" path="/about">
             <Calculator />
           </Route>
-          <Route name="user" path="/user/">
+          <Route name="user" path="/mcc/user/">
             <PlayerPage />
           </Route>
-          <Route name="home" path="/">
-            <HaloDataGrid></HaloDataGrid>
+          <Route name="userHI" path="/hi/user/">
+            <PlayerPageInfinite />
           </Route>
+          <Route name="home" path="/">
+            <HaloDataGrid />
+          </Route>
+          
         </Switch>
       </div>
     </Router>

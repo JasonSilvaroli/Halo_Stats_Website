@@ -188,8 +188,6 @@ export async function getRecentMatches(name, page = 1) {
 
     responseRM.data.forEach((data, index) => {
 
-        
-
         if(data.details.category.name === "Unknown") {
 
             data.details.category.name = "CTF"
