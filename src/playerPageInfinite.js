@@ -25,8 +25,6 @@ export default function PlayerPageInfinite() {
 
             setUser(res);
 
-            console.log(user)
-
             var winRate;
 
             if((res.allTime.match.losses + res.allTime.match.draws + res.allTime.match.left) === 0) {
@@ -81,8 +79,6 @@ export default function PlayerPageInfinite() {
         })
 
     }, [name])
-
-    console.log(matches)
 
     return(
         <Container>
@@ -155,7 +151,7 @@ export default function PlayerPageInfinite() {
                         <Grid item xs={9}>
                         <GameStatsHI data={user}/>
                             {
-                            matches.matches.map((obj, index) => {
+                            (matches.matches || []).map((obj, index) => {
                                 
                                 return(
 

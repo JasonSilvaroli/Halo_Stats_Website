@@ -145,123 +145,46 @@ export async function getPlayerInfoHI(name) {
 
 }
 
-export var Match = 
-{
-    "map": "Map Name",
-    "gameType": "GameType",
-    "outcome": "win",
-    "playedAt": "01/01/2000 - 12:00",
-    "duration": "00h 00m 00s",
-    "rank": 0,
-    "rounds": {
-        "won": 0,
-        "lost": 0,
-        "tied": 0
-    },
-    "stats": {
-        "kills": {
-            "total": 0,
-            "melee": 0,
-            "grenades": 0,
-            "headshots": 0,
-            "powerWeapons": 0,
-            "betrayals": 0
-        },
-        "assists": {
-            "total": 0,
-            "emp": 0,
-            "driver": 0,
-            "callouts": 0
-        },
-        "deaths": 0,
-        "suicides": 0,
-        "vehicles": {
-            "destroys": 0,
-            "hijacks": 0
-        },
-        "killDeathRatio": 0,
-        "damage": {
-            "taken": 0,
-            "dealt": 0
-        },
-        "shots": {
-            "fired": 0,
-            "landed": 0,
-            "missed": 0,
-            "accuracy": 0
-        },
-        "totalScore": 0,
-        "medals": 0
-    }
-}
-
-export var matchHistory = {
-
-    matches: [],
-    count: 0,
-    totals: {
-
-        kills: 0,
-        deaths: 0,
-        assists: 0,
-        headshots: 0,
-        wins: 0,
-        losses: 0
-
-    }
-
-}
-
 export async function getMatchesHI(name) {
 
-    function setMatch(data) {
-        
-        if(data.details.map.name !== "Unknown") {
+    function setMatch() {
 
-            this.map = data.details.map.name;
+        return(
 
-        } else if(data.details.map.asset.id === "c494ef7c-d203-42a9-9c0f-b3f576334501") {
-
-            this.map = "Hightower"
-
-        } else if(data.details.map.asset.id === "08607bf4-6abe-4a5b-9547-290a6cc1433e"){
-
-            this.map = "Deadlock"
-
+        {
+            map: "Map Name",
+            gameType: "Game Type",
+            outcome: "Win",
+            playedAt: "Date",
+            duration: "0 Seconds",
+            rank: 0,
+            rounds: 0,
+            stats: {
+                kills: {
+                    total: 0,
+                    melee: 0,
+                    grenades: 0,
+                    headshots: 0,
+                    powerWeapons: 0,
+                    betrayals: 0
+                },
+                assists: {
+                    total: 0,
+                    emp: 0,
+                    driver: 0,
+                    callouts: 0
+                },
+                deaths: 0,
+                suicides: 0,
+                vehicles: 0,
+                killDeathRatio: 0,
+                damage: 0,
+                shots: 0,
+                totalScore: 0,
+                medals: 0
+            }
         }
-
-        this.gameType = data.details.category.name;
-        this.outcome = data.outcome;
-        this.playedAt = data.played_at;
-        this.duration = data.duration.human;
-        this.rank = data.rank;
-        this.rounds = data.stats.rounds;
-        this.stats = {
-            kills: {
-                total: data.stats.summary.kills,
-                melee: data.stats.breakdowns.kills.melee,
-                grenades: data.stats.breakdowns.kills.grenades,
-                headshots: data.stats.breakdowns.kills.headshots,
-                powerWeapons: data.stats.breakdowns.kills.power_weapons,
-                betrayals: data.stats.summary.betrayals
-            },
-            assists: {
-                total: data.stats.summary.assists,
-                emp: data.stats.breakdowns.assists.emp,
-                driver: data.stats.breakdowns.assists.driver,
-                callouts: data.stats.breakdowns.assists.callouts
-            },
-            deaths: data.stats.summary.deaths,
-            suicides: data.stats.summary.suicides,
-            vehicles: data.stats.summary.vehicles,
-            killDeathRatio: data.stats.kdr,
-            damage: data.stats.damage,
-            shots: data.stats.shots,
-            totalScore: data.stats.score,
-            medals: data.stats.summary.medals
-        }
-
-        return this;
+        )
 
     }
 
@@ -302,7 +225,52 @@ export async function getMatchesHI(name) {
 
             data.played_at = splitDateTime(data.played_at);
 
-            const obj = setMatch(data);
+            var obj = setMatch();
+
+            if(data.details.map.name !== "Unknown") {
+
+                obj.map = data.details.map.name;
+    
+            } else if(data.details.map.asset.id === "c494ef7c-d203-42a9-9c0f-b3f576334501") {
+    
+                obj.map = "Hightower"
+    
+            } else if(data.details.map.asset.id === "08607bf4-6abe-4a5b-9547-290a6cc1433e"){
+    
+                obj.map = "Deadlock"
+    
+            }
+    
+            obj.gameType = data.details.category.name;
+            obj.outcome = data.outcome;
+            obj.playedAt = data.played_at;
+            obj.duration = data.duration.human;
+            obj.rank = data.rank;
+            obj.rounds = data.stats.rounds;
+            obj.stats = {
+                kills: {
+                    total: data.stats.summary.kills,
+                    melee: data.stats.breakdowns.kills.melee,
+                    grenades: data.stats.breakdowns.kills.grenades,
+                    headshots: data.stats.breakdowns.kills.headshots,
+                    powerWeapons: data.stats.breakdowns.kills.power_weapons,
+                    betrayals: data.stats.summary.betrayals
+                },
+                assists: {
+                    total: data.stats.summary.assists,
+                    emp: data.stats.breakdowns.assists.emp,
+                    driver: data.stats.breakdowns.assists.driver,
+                    callouts: data.stats.breakdowns.assists.callouts
+                },
+                deaths: data.stats.summary.deaths,
+                suicides: data.stats.summary.suicides,
+                vehicles: data.stats.summary.vehicles,
+                killDeathRatio: data.stats.kdr,
+                damage: data.stats.damage,
+                shots: data.stats.shots,
+                totalScore: data.stats.score,
+                medals: data.stats.summary.medals
+            }
 
             matchHistory.matches[matchHistory.count++] = obj;
 

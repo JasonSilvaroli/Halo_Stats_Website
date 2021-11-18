@@ -2,8 +2,6 @@ import { Grid, List, ListItem, Paper, Typography } from "@material-ui/core";
 import WinPieChart from "./pieChart";
 
 export default function GameStatsHI(props) {
-
-    console.log("gameStats", props)
     
     const col1 = [
         {name: "Kills", stat: props.data.allTime.kills.total},
