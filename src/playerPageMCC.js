@@ -37,8 +37,7 @@ export default function PlayerPage() {
     const [graphKD, setGraphKD] = React.useState([]);
     const [graphKills, setGraphKills] = React.useState([]);
     const [graphStreak, setGraphStreak] = React.useState([]);
-
-    var name  = window.location.pathname.split('/')[3];
+    const [name, setName] = React.useState("");
 
     const handleChange = (event, newValue) => {
 
@@ -48,6 +47,8 @@ export default function PlayerPage() {
     };
 
     useEffect(() => {
+
+        setName(window.location.pathname.split('/')[3])
 
         const gameModes = ["Slayer", "CTF", "Extraction", "King Of The Hill", "Assault"];
 
@@ -135,18 +136,18 @@ export default function PlayerPage() {
                     </Grid>
                     <Grid item xs={2}></Grid>
                     <Grid item xs={2}>
-                        <img src={user.user.avatar} alt="avatar" style={{height: 120, paddingTop: 20}}></img>
+                        <img src={user.user.avatar} alt="avatar" style={{maxHeight: 120, paddingTop: 20}}></img>
                     </Grid>
                 </Grid>
             </Paper>
             
             <Grid container spacing={4} direction={"row"} style={{marginTop: 20}}>
                 <Grid item xs={4}>
-                    <Grid item xs={4}>
-                    <Paper elevation={3} style={{width: 375, background: "#DCDCDC"}}>
+                    <Grid item>
+                    <Paper elevation={3} style={{background: "#DCDCDC"}}>
                         <List>
                             <ListItem>
-                                <Paper elevation={2} style={{padding: 5, width: 375}}>
+                                <Paper elevation={2} style={{padding: 5, width: "100%"}}>
                                     <Typography style={{color: "black"}}>Career Stats</Typography>
                                 </Paper>
                             </ListItem>
@@ -156,7 +157,7 @@ export default function PlayerPage() {
                                 return(
 
                                     <ListItem key={index}>
-                                        <Paper elevation={2} style={{padding: 5, width: 375}}>
+                                        <Paper elevation={2} style={{padding: 5, width: "100%"}}>
                                             <Typography component={'span'} display="inline" style={{color: "black", float: "left"}}>{obj.name} </Typography>
                                             <Typography component={'span'} display="inline" style={{color: "black", float: "right"}}>{obj.stat}</Typography>
                                         </Paper>
@@ -168,8 +169,8 @@ export default function PlayerPage() {
                         </List>
                     </Paper>
                     </Grid>
-                    <Grid item xs={4}>
-                        <Paper elevation={3} style={{width: 375, background: "#DCDCDC", paddingTop: 1, marginTop: 20}}>
+                    <Grid item>
+                        <Paper elevation={3} style={{background: "#DCDCDC", paddingTop: 1, marginTop: 20}}>
                             <Typography style={{marginTop: 10}}>Rank</Typography>
                             <Typography style={{marginTop: 10}}>{user.user.rank.title}, Tour {user.user.rank.tour}, Tier {user.user.rank.tier}</Typography>
                             <Typography style={{marginTop: 10, paddingBottom: 5}}>XP Remaining</Typography>
@@ -178,7 +179,7 @@ export default function PlayerPage() {
 
                         </Paper>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item>
                         <LineGraph stat={graphKD} name="Kill Death Ratio"></LineGraph>
                         <LineGraph stat={graphKills} name="Kills"></LineGraph>
                         <LineGraph stat={graphStreak} name="Wins"></LineGraph>

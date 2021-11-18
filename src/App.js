@@ -16,12 +16,11 @@ function App() {
     <div className="App">
       <header className="App-header">
        <Router>
-      <div>
           <NavBar></NavBar>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route name="about" path="/about">
+          <Route exact name="about" path="/about">
             <Calculator />
           </Route>
           <Route name="user" path="/mcc/user/">
@@ -34,7 +33,6 @@ function App() {
             <HaloDataGrid />
           </Route>
         </Switch>
-      </div>
     </Router>
       </header>
     </div>

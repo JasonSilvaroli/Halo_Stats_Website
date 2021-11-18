@@ -21,6 +21,7 @@ const useStyles = makeStyles({
             background: '#F9665E'
         },
         textAlign: "center",
+        cursor: "pointer"
     },
 
 }, { name: 'MuiDataGrid'});
@@ -74,6 +75,8 @@ export default function HaloDataGridMCC() {
         users.forEach((user, index) => {
 
             getPlayerInfo(user).then((obj) => {
+
+                console.log("t")
 
                 if(obj.allTime.gamesPlayed !== 0) {
 

@@ -19,6 +19,7 @@ const useStyles = makeStyles({
             background: '#F9665E'
         },
         textAlign: "center",
+        cursor: "pointer"
     },
 
 }, { name: 'MuiDataGrid'});

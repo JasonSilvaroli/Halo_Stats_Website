@@ -36,75 +36,102 @@ export async function getPlayerInfo(name) {
         good: Boolean
     };
 
-    let responseXp = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/xp", {
-        headers: {
-            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
-            "Content-Type": "application/json",
-            "Cryptum-Api-Version": "2.3-alpha"
-        }
-    })
+    if(name !== "") {
 
-    let playerXP = await responseXp.json()
+        let responseXp = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/xp", {
+            headers: {
+                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
+                "Content-Type": "application/json",
+                "Cryptum-Api-Version": "2.3-alpha"
+            }
+        })
 
-    if(responseXp.ok) {
+        let playerXP = await responseXp.json()
 
-        player.good = true;
+        if(responseXp.ok && playerXP.data.xp.total > 0) {
 
-        player.user.gamertag = playerXP.additional.gamertag;
-        player.user.rank.title = rankNames[playerXP.data.rank.current %30]
-        player.user.rank.tour = Number((playerXP.data.rank.current / 30).toFixed(0))
-        player.user.rank.tier = playerXP.data.rank.current %30
-        //player.user.rank.image_url = playerXP.data.image_url;
-        player.user.rank.totalxp = playerXP.data.xp.total;
+            player.good = true;
 
-        if(player.user.rank.tour < 9) {
+            player.user.gamertag = playerXP.additional.gamertag;
+            player.user.rank.title = rankNames[playerXP.data.rank.current %30]
+            player.user.rank.tour = Number((playerXP.data.rank.current / 30).toFixed(0))
+            player.user.rank.tier = playerXP.data.rank.current %30
+            //player.user.rank.image_url = playerXP.data.image_url;
+            player.user.rank.totalxp = playerXP.data.xp.total;
 
-            player.user.rank.remainingxp = rankXP[Number((playerXP.data.rank.current / 30).toFixed(0))][playerXP.data.rank.current %30] - playerXP.data.xp.total;
-            player.user.rank.totalXPToRankUp = rankXP[player.user.rank.tour][ player.user.rank.tier + 1] - rankXP[player.user.rank.tour][ player.user.rank.tier];
+            if(player.user.rank.tour < 9) {
+
+                player.user.rank.remainingxp = rankXP[Number((playerXP.data.rank.current / 30).toFixed(0))][playerXP.data.rank.current %30] - playerXP.data.xp.total;
+                player.user.rank.totalXPToRankUp = rankXP[player.user.rank.tour][ player.user.rank.tier + 1] - rankXP[player.user.rank.tour][ player.user.rank.tier];
+
+            } else {
+
+                player.user.rank.remainingxp = "n"
+                player.user.rank.totalXPToRankUp = "a"
+
+            }
+            //
+            let responseSR = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/service-record", {
+                headers: {
+                    Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
+                    "Content-Type": "application/json",
+                    "Cryptum-Api-Version": "2.3-alpha"
+                }
+            })
+
+            let playerSR = await responseSR.json();
+
+            player.user.clanTag = playerSR.additional.appearance.clan_tag;
+            player.user.emblem = playerSR.additional.appearance.emblem_url;
+            player.user.avatar = playerSR.additional.appearance.avatar_url;
+            player.allTime.timePlayed = playerSR.data.time_played.human;
+            player.allTime.gamesPlayed = playerSR.data.multiplayer.total_matches;
+            player.allTime.kills = playerSR.data.multiplayer.summary.kills;
+            player.allTime.deaths = playerSR.data.multiplayer.summary.deaths;
+            player.allTime.wins = playerSR.data.multiplayer.summary.wins;
+            player.allTime.losses = playerSR.data.multiplayer.summary.losses;
+            player.allTime.assists = playerSR.data.multiplayer.summary.assists;
+            player.allTime.killDeathRatio = playerSR.data.multiplayer.kdr.toFixed(2);
+            player.allTime.winRatio = (player.allTime.wins/player.allTime.gamesPlayed).toFixed(2);
+
+            let responseName = await fetch("https://cryptum.halodotapi.com/games/hmcc/appearance/players/" + name, {
+                headers: {
+                    Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
+                    "Content-Type": "application/json",
+                    "Cryptum-Api-Version": "2.3-alpha"
+                }
+            })
+
+            let playerAp = await responseName.json();
+
+            player.user.serviceTag = playerAp.data.service_tag;
+
+            
 
         } else {
 
-            player.user.rank.remainingxp = "n"
-            player.user.rank.totalXPToRankUp = "a"
+            player.good = false;
+            player.user.gamertag = "Player Not Found";
+            player.user.rank.title = rankNames[1]
+            player.user.rank.tour = 0
+            player.user.rank.tier = 0
+            player.user.rank.totalxp = 0
+            player.user.rank.remainingxp = 0
+            player.user.rank.totalXPToRankUp = 0
+            player.user.clanTag = ""
+            player.user.emblem = "https://emblems.svc.halowaypoint.com/hmcc/emblems/green_brick_mjolnir-on-cyan_horizgradient";
+            player.user.avatar = "https://content.halocdn.com/media/Default/games/Halo-Master-Chief-Collection/avatars/playeridavatar_006-9df1527d161f499e9895e382e02cde8b.jpg";
+            player.allTime.timePlayed = "0d 00h 00m 00s";
+            player.allTime.gamesPlayed = 0;
+            player.allTime.kills = 0;
+            player.allTime.deaths = 0;
+            player.allTime.wins = 0;
+            player.allTime.losses = 0;
+            player.allTime.assists = 0;
+            player.allTime.killDeathRatio = 0;
+            player.allTime.winRatio = 0;
 
         }
-        let responseSR = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/service-record", {
-            headers: {
-                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
-                "Content-Type": "application/json",
-                "Cryptum-Api-Version": "2.3-alpha"
-            }
-        })
-
-        let playerSR = await responseSR.json();
-
-        player.user.clanTag = playerSR.additional.appearance.clan_tag;
-        player.user.emblem = playerSR.additional.appearance.emblem_url;
-        player.user.avatar = playerSR.additional.appearance.avatar_url;
-        player.allTime.timePlayed = playerSR.data.time_played.human;
-        player.allTime.gamesPlayed = playerSR.data.multiplayer.total_matches;
-        player.allTime.kills = playerSR.data.multiplayer.summary.kills;
-        player.allTime.deaths = playerSR.data.multiplayer.summary.deaths;
-        player.allTime.wins = playerSR.data.multiplayer.summary.wins;
-        player.allTime.losses = playerSR.data.multiplayer.summary.losses;
-        player.allTime.assists = playerSR.data.multiplayer.summary.assists;
-        player.allTime.killDeathRatio = playerSR.data.multiplayer.kdr.toFixed(2);
-        player.allTime.winRatio = (player.allTime.wins/player.allTime.gamesPlayed).toFixed(2);
-
-        let responseName = await fetch("https://cryptum.halodotapi.com/games/hmcc/appearance/players/" + name, {
-            headers: {
-                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
-                "Content-Type": "application/json",
-                "Cryptum-Api-Version": "2.3-alpha"
-            }
-        })
-
-        let playerAp = await responseName.json();
-
-        player.user.serviceTag = playerAp.data.service_tag;
-
-        
-
     } else {
 
         player.good = false;
@@ -136,77 +163,87 @@ export async function getPlayerInfo(name) {
 
 export async function getRecentMatches(name, page = 1) {
 
-    function Match(data) {
-
-        this.won = data.victory
-        this.map = data.details.map.name
-        this.game = {
-            name: data.details.engine.name,
-            logo: data.details.engine.logo_url
-        }
-        this.gameType = data.details.category.name
-        this.date = data.played_at
-        this.duration = data.duration.human.split(" ").slice(1).join(" ")
-        this.kills = data.stats.kills
-        this.deaths = data.stats.deaths
-        this.assists = data.stats.assists
-        this.score = data.stats.score
-        this.headshots = data.stats.headshots
-        this.killDeathRatio = data.stats.kdr.toFixed(2)
-
-    }
-
     var matchHistory = {
 
         matches: [],
         count: 0,
         totals: {
 
-            kills: Number,
-            deaths: Number,
-            assists: Number,
-            headshots: Number,
-            wins: Number,
-            losses: Number
+            kills: 0,
+            deaths: 0,
+            assists: 0,
+            headshots: 0,
+            wins: 0,
+            losses: 0
 
         }
 
     }
 
-    let response = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/recent-matches?page=" + page, {
-        headers: {
-            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
-            "Content-Type": "application/json",
-            "Cryptum-Api-Version": "2.3-alpha"
+    if(name !== "") {
+
+        function Match(data) {
+
+            this.won = data.victory
+            this.map = data.details.map.name
+            this.game = {
+                name: data.details.engine.name,
+                logo: data.details.engine.logo_url
+            }
+            this.gameType = data.details.category.name
+            this.date = data.played_at
+            this.duration = data.duration.human.split(" ").slice(1).join(" ")
+            this.kills = data.stats.kills
+            this.deaths = data.stats.deaths
+            this.assists = data.stats.assists
+            this.score = data.stats.score
+            this.headshots = data.stats.headshots
+            this.killDeathRatio = data.stats.kdr.toFixed(2)
+
         }
-    })
 
-    let responseRM = await response.json()
+        let response = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/recent-matches?page=" + page, {
+            headers: {
+                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
+                "Content-Type": "application/json",
+                "Cryptum-Api-Version": "2.3-alpha"
+            }
+        })
 
-    responseRM.data.forEach((data, index) => {
+        let responseRM = await response.json()
 
-        if(data.details.category.name === "Unknown") {
+        console.log(response)
 
-            data.details.category.name = "CTF"
+        if(response.ok) {
+
+            responseRM.data.forEach((data, index) => {
+
+                if(data.details.category.name === "Unknown") {
+
+                    data.details.category.name = "CTF"
+
+                }
+
+                var date = data.played_at.split("T")
+
+                date[1] = date[1].split(".")[0];
+
+                date[1] = date[1].split(":");
+
+                date[1] = date[1][0] + ":" + date[1][1]
+
+                data.played_at = date[0] + " " + date[1];
+
+                const obj = new Match(data);
+                matchHistory.matches[matchHistory.count + index] = obj;
+
+            })
+            
+            matchHistory.count += responseRM.count;
 
         }
+    }
 
-        var date = data.played_at.split("T")
-
-        date[1] = date[1].split(".")[0];
-
-        date[1] = date[1].split(":");
-
-        date[1] = date[1][0] + ":" + date[1][1]
-
-        data.played_at = date[0] + " " + date[1];
-
-        const obj = new Match(data);
-        matchHistory.matches[matchHistory.count + index] = obj;
-
-    })
-
-    matchHistory.count += responseRM.count;
     return matchHistory;
 
 }
