@@ -1,4 +1,5 @@
 import { rankXP, rankNames } from "./rankXP";
+import * as apiKey from "./configure/apiKey.json"
 
 export async function getPlayerInfo(name) {
 
@@ -37,7 +38,7 @@ export async function getPlayerInfo(name) {
 
     let responseXp = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/xp", {
         headers: {
-            Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
             "Content-Type": "application/json",
             "Cryptum-Api-Version": "2.3-alpha"
         }
@@ -47,8 +48,6 @@ export async function getPlayerInfo(name) {
 
     if(responseXp.ok) {
 
-        console.log(playerXP)
-
         player.good = true;
 
         player.user.gamertag = playerXP.additional.gamertag;
@@ -57,8 +56,6 @@ export async function getPlayerInfo(name) {
         player.user.rank.tier = playerXP.data.rank.current %30
         //player.user.rank.image_url = playerXP.data.image_url;
         player.user.rank.totalxp = playerXP.data.xp.total;
-
-        console.log(playerXP.data.rank.current %30)
 
         if(player.user.rank.tour < 9) {
 
@@ -73,7 +70,7 @@ export async function getPlayerInfo(name) {
         }
         let responseSR = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/service-record", {
             headers: {
-                Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
                 "Content-Type": "application/json",
                 "Cryptum-Api-Version": "2.3-alpha"
             }
@@ -96,7 +93,7 @@ export async function getPlayerInfo(name) {
 
         let responseName = await fetch("https://cryptum.halodotapi.com/games/hmcc/appearance/players/" + name, {
             headers: {
-                Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+                Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
                 "Content-Type": "application/json",
                 "Cryptum-Api-Version": "2.3-alpha"
             }
@@ -178,7 +175,7 @@ export async function getRecentMatches(name, page = 1) {
 
     let response = await fetch("https://cryptum.halodotapi.com/games/hmcc/stats/players/" + name + "/recent-matches?page=" + page, {
         headers: {
-            Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
             "Content-Type": "application/json",
             "Cryptum-Api-Version": "2.3-alpha"
         }

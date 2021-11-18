@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import makeStyles from '@material-ui/styles/makeStyles'
 import { Container, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button'
-import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles({
 
@@ -53,8 +52,6 @@ export default function Calculator() {
         setDeaths(event.target.value);
       //deaths = event.target.value;
     }
-    const test = useLocation();
-    console.log(test);
 
     return(
         <Container>

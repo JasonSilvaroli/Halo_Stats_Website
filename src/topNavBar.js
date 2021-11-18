@@ -21,8 +21,6 @@ export default function NavBar() {
 
     const keyPress = (e) => {
 
-        console.log("w")
-
         if(e.keyCode === 13) {
             setPath("/mcc/user/" + e.target.value)
             setRedirectTo(true)
@@ -53,12 +51,11 @@ export default function NavBar() {
                                     <Link onClick={() => menuClose()} style={{color: "#000000", textDecoration: 'none'}} to="/search"><MenuItem >Search</MenuItem></Link>
                                 </Menu>
                             </Grid>
-                            <Grid item xs={1}>
-                                <Typography variant="h6">
+                            <Grid item xs={9}>
+                                <Typography variant="h6" style={{textAlign: "left"}}>
                                     The Domain
                                 </Typography>
                             </Grid>
-                            <Grid item xs={8} />
                             <Grid item xs={2}>
                                     <TextField inputProps={{className: classes.root}} placeholder="Search..." onKeyDown={keyPress}></TextField>
                             </Grid>

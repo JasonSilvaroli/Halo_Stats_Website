@@ -6,9 +6,9 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import PlayerPage from './playerPage';
+import PlayerPage from './playerPageMCC';
 import NavBar from './topNavBar';
-import HaloDataGrid from './dataGrid';
+import HaloDataGrid from './dataGridMainPage';
 import PlayerPageInfinite from './playerPageInfinite';
 
 function App() {
@@ -33,7 +33,6 @@ function App() {
           <Route name="home" path="/">
             <HaloDataGrid />
           </Route>
-          
         </Switch>
       </div>
     </Router>

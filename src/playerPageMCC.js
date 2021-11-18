@@ -77,8 +77,6 @@ export default function PlayerPage() {
 
         if(user.good) {
 
-            console.log("good")
-
             getRecentMatches(name).then((obj) => {
 
                 var streak = 0;

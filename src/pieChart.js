@@ -1,5 +1,4 @@
-import { Container } from '@material-ui/core';
-import { PieChart, Pie, Cell} from 'recharts'
+import { PieChart, Pie, Cell, ResponsiveContainer} from 'recharts'
 
 export default function WinPieChart(props) {
 
@@ -20,15 +19,15 @@ export default function WinPieChart(props) {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
         const x = cx + radius * Math.cos(-midAngle * RADIAN);
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
-      
+
         return (
             <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" style={{fontSize: 15, fontWeight: "500"}}>{index === 0 ? wins : losses}</text>
         );
       }
 
     return(
-        <Container style={{paddingRight: 0}}>
-            <PieChart width={100} height={100}>
+        <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+            <PieChart>
                 <Pie
                     data={data}
                     cx={40}
@@ -36,6 +35,7 @@ export default function WinPieChart(props) {
                     labelLine={false}
                     outerRadius={40}
                     dataKey="value"
+                    isAnimationActive={false}
                     label={renderCustomizedLabel}
                 >
                     {
@@ -44,7 +44,7 @@ export default function WinPieChart(props) {
                     ))}
                 </Pie>
             </PieChart>
-        </Container>
+        </ResponsiveContainer>
 
     )
 

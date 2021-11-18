@@ -1,72 +1,74 @@
+import * as apiKey from "./configure/apiKey.json"
+ 
+export var player = {
+
+    allTime: {
+        gamesPlayed: 0, 
+
+        kills: {
+            total: 0,
+            melee: 0,
+            grenades: 0,
+            headshots: 0,
+            powerWeapons: 0,
+            betrayals: 0
+        },
+
+        assists: {
+            total: 0,
+            emp: 0,
+            driver: 0,
+            callouts: 0
+        },
+
+        deaths: 0,
+        suicides: 0,
+        vehicles: {
+            destroys: 0,
+            hijacks: 0,
+        }, 
+
+        killDeathRatio: 0,
+        match: {
+            wins: 0,
+            losses: 0,
+            left: 0,
+            draws: 0
+
+        },
+
+        damage: {
+            taken: 0,
+            dealt: 0,
+            average: 0,
+        },
+
+        shots: {
+            fired: 0,
+            landed: 0,
+            missed: 0,
+            accuracy: 0
+        },
+
+        totalScore: 0,
+        medals: 0
+
+    },
+    user: {
+        gamertag: "Spartan", 
+        serviceTag: "", 
+        emblemURL: "https://cryptum.halodotapi.com/games/hi/appearance/images/emblems/104-001-olympus-spart-f9bc88ce.png", 
+        backDropURL: "https://cryptum.halodotapi.com/games/hi/appearance/images/backdrops/103-000-ui-background-f3dad3eb.png", 
+    },
+    good: Boolean
+
+}
+
 export async function getPlayerInfoHI(name) {
-
-    var player = {
-
-        allTime: {
-            gamesPlayed: Number, 
-
-            kills: {
-                total: Number,
-                melee: Number,
-                grenades: Number,
-                headshots: Number,
-                powerWeapons: Number,
-                betrayals: Number
-            },
-
-            assists: {
-                total: Number,
-                emp: Number,
-                driver: Number,
-                callouts: Number
-            },
-
-            deaths: Number,
-            suicides: Number,
-            vehicles: {
-                destroys: Number,
-                hijacks: Number,
-            }, 
-
-            killDeathRatio: Number,
-            match: {
-                wins: Number,
-                losses: Number,
-                left: Number,
-                draws: Number
-
-            },
-
-            damage: {
-                taken: Number,
-                dealt: Number,
-                average: Number,
-            },
-
-            shots: {
-                fired: Number,
-                landed: Number,
-                missed: Number,
-                accuracy: Number
-            },
-
-            totalScore: Number,
-            medals: Number
-
-        },
-        user: {
-            gamertag: String, 
-            serviceTag: String, 
-            emblemURL: String, 
-            backDropURL: String, 
-        },
-        good: Boolean
-
-    }
 
     let serviceRecordRP = await fetch("https://cryptum.halodotapi.com/games/hi/stats/players/" + name + "/service-record/top-100", {
         headers: {
-          Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+          Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
           "Content-Type": "application/json",
           "Cryptum-Api-Version": "2.3-alpha"
         }
@@ -76,7 +78,7 @@ export async function getPlayerInfoHI(name) {
 
     let playerAppearenceRP = await fetch("https://cryptum.halodotapi.com/games/hi/appearance/players/" + name, {
         headers: {
-            Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
             "Content-Type": "application/json",
             "Cryptum-Api-Version": "2.3-alpha"
         }
@@ -130,7 +132,7 @@ export async function getPlayerInfoHI(name) {
         player.allTime.totalScore = playerSR.total_score;
         player.allTime.medals = playerSR.summary.medals;
 
-        player.user.gamertag = name;
+        player.user.gamertag = name.replace("%20", " ");
         player.user.serviceTag = playerApp.service_tag;
         player.user.emblemURL = playerApp.emblem_url;
         player.user.backDropURL = playerApp.backdrop_image_url;
@@ -143,10 +145,77 @@ export async function getPlayerInfoHI(name) {
 
 }
 
+export var Match = 
+{
+    "map": "Map Name",
+    "gameType": "GameType",
+    "outcome": "win",
+    "playedAt": "01/01/2000 - 12:00",
+    "duration": "00h 00m 00s",
+    "rank": 0,
+    "rounds": {
+        "won": 0,
+        "lost": 0,
+        "tied": 0
+    },
+    "stats": {
+        "kills": {
+            "total": 0,
+            "melee": 0,
+            "grenades": 0,
+            "headshots": 0,
+            "powerWeapons": 0,
+            "betrayals": 0
+        },
+        "assists": {
+            "total": 0,
+            "emp": 0,
+            "driver": 0,
+            "callouts": 0
+        },
+        "deaths": 0,
+        "suicides": 0,
+        "vehicles": {
+            "destroys": 0,
+            "hijacks": 0
+        },
+        "killDeathRatio": 0,
+        "damage": {
+            "taken": 0,
+            "dealt": 0
+        },
+        "shots": {
+            "fired": 0,
+            "landed": 0,
+            "missed": 0,
+            "accuracy": 0
+        },
+        "totalScore": 0,
+        "medals": 0
+    }
+}
+
+export var matchHistory = {
+
+    matches: [],
+    count: 0,
+    totals: {
+
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        headshots: 0,
+        wins: 0,
+        losses: 0
+
+    }
+
+}
+
 export async function getMatchesHI(name) {
 
-    function Match(data) {
-
+    function setMatch(data) {
+        
         if(data.details.map.name !== "Unknown") {
 
             this.map = data.details.map.name;
@@ -192,6 +261,8 @@ export async function getMatchesHI(name) {
             medals: data.stats.summary.medals
         }
 
+        return this;
+
     }
 
     var matchHistory = {
@@ -213,7 +284,7 @@ export async function getMatchesHI(name) {
 
     let matchRP = await fetch("https://cryptum.halodotapi.com/games/hi/stats/players/" + name + "/matches", {
         headers: {
-          Authorization: "Cryptum-Token 9ygHR2MqrnPkgNlnzxRjoTAFgtf2PR183FZYa23GElQlNS4ADKyLQCi9ygJIpCkk",
+            Authorization: "Cryptum-Token " + apiKey.default.data.access_token,
           "Content-Type": "application/json",
           "Cryptum-Api-Version": "2.3-alpha"
         }
@@ -231,7 +302,7 @@ export async function getMatchesHI(name) {
 
             data.played_at = splitDateTime(data.played_at);
 
-            const obj = new Match(data);
+            const obj = setMatch(data);
 
             matchHistory.matches[matchHistory.count++] = obj;
 
@@ -270,6 +341,6 @@ function splitDateTime(obj) {
 
     obj = new Date(dateTime.date + " " + dateTime.time + " GMT");
 
-    return ("0" + obj.getDate()).slice(-2) + "/" + ("0" + obj.getMonth()).slice(-2) + "/" + obj.getFullYear() + " - " + ("0" + obj.getHours()).slice(-2) + ":" + ("0" + obj.getMinutes()).slice(-2)
+    return ("0" + obj.getDate()).slice(-2) + "/" + ("0" + (obj.getMonth() + 1)).slice(-2) + "/" + obj.getFullYear() + " - " + ("0" + obj.getHours()).slice(-2) + ":" + ("0" + obj.getMinutes()).slice(-2)
 
 }

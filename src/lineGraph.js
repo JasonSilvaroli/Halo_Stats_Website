@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@material-ui/core";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 
 export default function LineGraph(props) {
@@ -11,7 +11,7 @@ export default function LineGraph(props) {
     } else {
 
         return(
-            <Paper elevation={3} style={{padding: 10, background: "#DCDCDC", width: 355, height: 294}}>
+            <Paper elevation={3} style={{padding: 10, background: "#DCDCDC", width: "80%", height: 294}}>
                 <Typography style={{paddingTop: 15}}>Loading</Typography>
             </Paper>
         )
@@ -19,21 +19,20 @@ export default function LineGraph(props) {
     }
 
     return(
-
-        <Paper elevation={3} style={{padding: 10, background: "#DCDCDC", width: 355, marginTop: 20}}>
+        <Paper elevation={3} style={{padding: 10, background: "#DCDCDC", marginTop: 20}}>
             <Typography>{props.name}</Typography>
-            <LineChart
-                width={340}
-                height={250}
-                data={data}
-            >
-                <CartesianGrid />
-                <XAxis dataKey="name" tick={{fontSize: 15}}/>
-                <YAxis dataKey="stat" tick={{fontSize: 15}}/>
-                <Line type="monotone" dataKey="stat" stroke="grey" />
-            </LineChart>
+            <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+            
+                <LineChart
+                    data={data}
+                >
+                    <CartesianGrid />
+                    <XAxis dataKey="name" tick={{fontSize: 15}}/>
+                    <YAxis dataKey="stat" tick={{fontSize: 15}}/>
+                    <Line type="monotone" dataKey="stat" stroke="grey" />
+                </LineChart>
+            </ResponsiveContainer>
         </Paper>
-
     )
 
 }
